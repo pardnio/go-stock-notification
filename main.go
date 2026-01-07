@@ -50,7 +50,7 @@ func main() {
 	defer cancel()
 
 	config := db{
-		host:     "localhost",
+		host:     "postgres",
 		port:     "5432",
 		user:     "postgres",
 		password: "password",

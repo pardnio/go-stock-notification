@@ -1,12 +1,24 @@
 services:
+  app:
+    image: golang:1.25.1-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: go run main.go
+    ports:
+      - "8080:8080"
+
   postgres:
     image: postgres:18.1-alpine
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USER: ${DB_USER:?"DB_USER is required"}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?"DB_PASSWORD is required"}
-      POSTGRES_DB: database
+      POSTGRES_DB: ${DB_NAME:?"DB_NAME is required"}
     ports:
-      - "5432:5432"
+      - "${DB_PORT:?DB_PORT is required}:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./init/pg.sql:/docker-entrypoint-initdb.d/init.sql:ro,Z,U
