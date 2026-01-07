@@ -120,6 +120,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER notify_ticker
-AFTER UPDATE ON ticker_notify
+AFTER INSERT OR UPDATE ON ticker_notify
 FOR EACH ROW
 EXECUTE FUNCTION notify_ticker_push();
